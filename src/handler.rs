@@ -21,10 +21,10 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
                 }
             }
             // List handlers
-            KeyCode::Char('j') => {
+            KeyCode::Char('j') | KeyCode::Down => {
                 app.select_next();
             }
-            KeyCode::Char('k') => {
+            KeyCode::Char('k') | KeyCode::Up => {
                 app.select_previous();
             }
             KeyCode::Char('o') => {
