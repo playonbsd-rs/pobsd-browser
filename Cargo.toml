@@ -1,0 +1,16 @@
+[package]
+name = "pobsd-browser"
+version = "0.1.0"
+authors = ["Hukadan <me@hukadan.org>"]
+license = "MIT"
+edition = "2021"
+
+[dependencies]
+clap = "4.5.17"
+crossterm = { version = "0.28.1", features = ["event-stream"] }
+futures = "0.3.30"
+libpobsd = "0.3.1"
+ratatui = "0.28.1"
+reqwest = "0.12.7"
+serde = { version = "1.0.209", features = ["derive", "serde_derive"] }
+tokio = { version = "1.39.3", features = ["full"] }
