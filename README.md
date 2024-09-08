@@ -6,7 +6,7 @@ Terminal user interface to browse the PlayOnBSD database.
 #### Roadmap
 
 - [x] Properly display game list
-- [-] Properly display game details
+- [ ] Properly display game details
 - [x] Use output of steamctl to indicate owned games in the list (no clue about how to do the same for Gog)
 - [ ] Filters on owned games
 - [ ] Provide instructions to install Steam games (no clue about how to do for Gog)
