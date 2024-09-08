@@ -143,7 +143,7 @@ impl App {
     }
 
     pub fn update_game_list(&mut self) {
-        match &self.search_text {
+        let games = match &self.search_text {
             Some(text) => {
                 let mut game_filter = GameFilter::default();
                 game_filter.set_name(&text);
@@ -152,34 +152,21 @@ impl App {
                 game_filter.set_tag(&text);
                 game_filter.set_genre(&text);
                 let search_type = SearchType::NotCaseSensitive;
-                let games = self
-                    .game_db
-                    .search_game_by_filter(&search_type, &game_filter);
-                self.games = games
-                    .into_iter()
-                    .map(|g| match &self.steam_ids {
-                        Some(ids) => match g.get_steam_id() {
-                            Some(id) => GameItem::new(g.uid, g.name.to_owned(), ids.contains(&id)),
-                            None => GameItem::new(g.uid, g.name.to_owned(), false),
-                        },
-                        None => GameItem::new(g.uid, g.name.to_owned(), false),
-                    })
-                    .collect();
+                self.game_db
+                    .search_game_by_filter(&search_type, &game_filter)
             }
-            None => {
-                let games = self.game_db.get_all_games();
-                self.games = games
-                    .into_iter()
-                    .map(|g| match &self.steam_ids {
-                        Some(ids) => match g.get_steam_id() {
-                            Some(id) => GameItem::new(g.uid, g.name.to_owned(), ids.contains(&id)),
-                            None => GameItem::new(g.uid, g.name.to_owned(), false),
-                        },
-                        None => GameItem::new(g.uid, g.name.to_owned(), false),
-                    })
-                    .collect();
-            }
-        }
+            None => self.game_db.get_all_games(),
+        };
+        self.games = games
+            .into_iter()
+            .map(|g| match &self.steam_ids {
+                Some(ids) => match g.get_steam_id() {
+                    Some(id) => GameItem::new(g.uid, g.name.to_owned(), ids.contains(&id)),
+                    None => GameItem::new(g.uid, g.name.to_owned(), false),
+                },
+                None => GameItem::new(g.uid, g.name.to_owned(), false),
+            })
+            .collect();
     }
 
     pub fn clear_search(&mut self) {
