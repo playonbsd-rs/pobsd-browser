@@ -27,6 +27,9 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
             KeyCode::Char('k') => {
                 app.select_previous();
             }
+            KeyCode::Char('o') => {
+                app.switch_owned_only();
+            }
             // Other handlers you could add here.
             _ => {}
         },

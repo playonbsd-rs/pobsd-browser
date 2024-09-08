@@ -64,6 +64,8 @@ pub struct App {
     pub search_text: Option<String>,
     /// list of Steam ids (owned game)
     pub steam_ids: Option<Vec<usize>>,
+    /// if true, only list owned game
+    pub owned_only: bool,
 }
 
 impl Default for App {
@@ -76,6 +78,7 @@ impl Default for App {
             state: ListState::default(),
             search_text: None,
             steam_ids: None,
+            owned_only: false,
         }
     }
 }
@@ -101,6 +104,7 @@ impl App {
             state: ListState::default(),
             search_text: None,
             steam_ids,
+            owned_only: false,
         }
     }
 
@@ -157,7 +161,7 @@ impl App {
             }
             None => self.game_db.get_all_games(),
         };
-        self.games = games
+        let games: Vec<GameItem> = games
             .into_iter()
             .map(|g| match &self.steam_ids {
                 Some(ids) => match g.get_steam_id() {
@@ -167,6 +171,11 @@ impl App {
                 None => GameItem::new(g.uid, g.name.to_owned(), false),
             })
             .collect();
+        if self.owned_only {
+            self.games = games.into_iter().filter(|x| x.steam_owned).collect();
+        } else {
+            self.games = games
+        }
     }
 
     pub fn clear_search(&mut self) {
@@ -179,5 +188,13 @@ impl App {
             InputMode::Normal => self.mode = InputMode::Search,
             InputMode::Search => self.mode = InputMode::Normal,
         }
+    }
+    pub fn switch_owned_only(&mut self) {
+        if self.owned_only {
+            self.owned_only = false;
+        } else {
+            self.owned_only = true;
+        }
+        self.update_game_list();
     }
 }
