@@ -5,6 +5,26 @@ use ratatui::widgets::{Block, BorderType, List, Paragraph, Wrap};
 
 use crate::app::{App, GameItem, InputMode};
 
+fn add_field(text: &mut Vec<Line>, field_name: &str, field: &Option<String>) {
+    if let Some(field) = field {
+        let line = Line::from(vec![
+            Span::styled(format!("{}: ", field_name), Style::new().blue().bold()),
+            Span::raw(field.to_owned()),
+        ]);
+        text.push(line);
+    }
+}
+
+fn add_vec_field(text: &mut Vec<Line>, field_name: &str, field: &Option<Vec<String>>) {
+    if let Some(field) = field {
+        let line = Line::from(vec![
+            Span::styled(format!("{}: ", field_name), Style::new().blue().bold()),
+            Span::raw(field.join(", ").to_owned()),
+        ]);
+        text.push(line);
+    }
+}
+
 #[derive(Debug, PartialEq, Eq)]
 pub struct GameDetailsWidget {
     game: Option<Game>,
@@ -30,13 +50,17 @@ impl Widget for GameDetailsWidget {
                 ));
                 text.push(name);
                 text.push(Line::default());
-                if let Some(engine) = &game.engine {
-                    let line = Line::from(vec![
-                        Span::styled("Engine: ", Style::new().blue().bold()),
-                        Span::raw(engine.to_owned()),
-                    ]);
-                    text.push(line);
-                }
+
+                add_field(&mut text, "Engine", &game.engine);
+                add_field(&mut text, "Runtime", &game.runtime);
+                add_field(&mut text, "Setup", &game.setup);
+                add_field(&mut text, "Hints", &game.hints);
+                add_field(&mut text, "Year", &game.year);
+                add_vec_field(&mut text, "Genres", &game.genres);
+                add_vec_field(&mut text, "Tags", &game.tags);
+                add_vec_field(&mut text, "Developers", &game.devs);
+                add_vec_field(&mut text, "Publishers", &game.publis);
+
                 if let Some(stores) = &game.stores {
                     let mut store_names: Vec<String> = Vec::new();
                     for store in &stores.0 {
@@ -45,13 +69,6 @@ impl Widget for GameDetailsWidget {
                     let line = Line::from(vec![
                         Span::styled("Stores: ", Style::new().blue().bold()),
                         Span::raw(store_names.join(", ")),
-                    ]);
-                    text.push(line);
-                }
-                if let Some(hints) = &game.hints {
-                    let line = Line::from(vec![
-                        Span::styled("hints: ", Style::new().blue().bold()),
-                        Span::raw(hints.to_owned()),
                     ]);
                     text.push(line);
                 }
