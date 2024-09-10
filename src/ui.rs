@@ -20,21 +20,6 @@ pub fn render(app: &mut App, frame: &mut Frame) {
         .constraints(vec![Constraint::Percentage(50), Constraint::Percentage(50)])
         .split(frame.area());
 
-    // Get game name by reference
-    /*
-    let game_titles: Vec<String> = app
-        .games
-        .clone()
-        .into_iter()
-        .map(|x| {
-            if x.steam_owned {
-                format!("{} (O)", x.name)
-            } else {
-                x.name
-            }
-        })
-        .collect();
-        */
     // Render left panel
     let left_panel = LeftPanelWidget::new(app.search_text.clone(), app.games.clone());
     frame.render_stateful_widget(left_panel, layout[0], app);
