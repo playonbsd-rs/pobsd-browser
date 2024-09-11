@@ -33,15 +33,15 @@ impl GameItem {
     }
 }
 
-impl<'a> Into<ListItem<'a>> for GameItem {
-    fn into(self) -> ListItem<'a> {
-        let line = if self.steam_owned {
+impl<'a> From<GameItem> for ListItem<'a> {
+    fn from(val: GameItem) -> Self {
+        let line = if val.steam_owned {
             Line::styled(
-                format!("{} 🎮", self.name),
+                format!("{} 🎮", val.name),
                 Style::default().fg(Color::Green),
             )
         } else {
-            Line::styled(format!("{}", self.name), Style::default())
+            Line::styled(val.name, Style::default())
         };
         let item = ListItem::new(line);
         item
@@ -150,11 +150,11 @@ impl App {
         let games = match &self.search_text {
             Some(text) => {
                 let mut game_filter = GameFilter::default();
-                game_filter.set_name(&text);
-                game_filter.set_engine(&text);
-                game_filter.set_runtime(&text);
-                game_filter.set_tag(&text);
-                game_filter.set_genre(&text);
+                game_filter.set_name(text);
+                game_filter.set_engine(text);
+                game_filter.set_runtime(text);
+                game_filter.set_tag(text);
+                game_filter.set_genre(text);
                 let search_type = SearchType::NotCaseSensitive;
                 self.game_db
                     .search_game_by_filter(&search_type, &game_filter)
@@ -190,11 +190,7 @@ impl App {
         }
     }
     pub fn switch_owned_only(&mut self) {
-        if self.owned_only {
-            self.owned_only = false;
-        } else {
-            self.owned_only = true;
-        }
+        self.owned_only = !self.owned_only;
         self.update_game_list();
     }
 }
