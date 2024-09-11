@@ -122,6 +122,9 @@ impl App {
     pub fn select_previous(&mut self) {
         self.state.select_previous()
     }
+    pub fn select_first(&mut self) {
+        self.state.select_first()
+    }
 
     pub fn push_search(&mut self, l: char) {
         self.search_text = match &self.search_text {
@@ -147,6 +150,7 @@ impl App {
     }
 
     pub fn update_game_list(&mut self) {
+        self.select_first();
         let games = match &self.search_text {
             Some(text) => {
                 let mut game_filter = GameFilter::default();
