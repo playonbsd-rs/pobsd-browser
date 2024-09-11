@@ -164,8 +164,13 @@ impl<'a> StatefulWidget for LeftPanelWidget<'a> {
     type State = App;
 
     fn render(self, area: Rect, buf: &mut Buffer, state: &mut Self::State) {
+        let list_title = if state.owned_only {
+            "Game List (owned only)"
+        } else {
+            "Game List"
+        };
         let list_block = Block::bordered()
-            .title("Game List")
+            .title(list_title)
             .title_alignment(Alignment::Center)
             .border_type(BorderType::Rounded);
 
