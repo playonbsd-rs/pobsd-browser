@@ -1,0 +1,119 @@
+.Dd September 11, 2024
+.Dt POBSD-BROWSER 1
+.Os
+.Sh NAME
+.Nm pobsd-browser
+.Nd terminal user interface for browsing the PlayOnBSD database
+.Sh SYNOPSIS
+.Nm
+.Op Fl f Ar file
+.Op Fl s Ar file
+.Op Fl u Ar url
+.Op Fl o
+.Sh DESCRIPTION
+Provides a terminal user interface for browsing the PlayOnBSD database
+provided by the playonbsd/OpenBSD-Games-Database GitHub repository.
+.Pp
+Its arguments are as follows:
+.Bl -tag -width Ds
+.It Fl f Ar file
+Load the game database from the provided
+.Ar file
+.Pq see FILES section for more details on the database format .
+Cannot be used together with
+.Fl o
+or
+.Fl u
+argument
+.It Fl s Ar file
+Use the Steam ids contained in the provided
+.Ar file
+to identify the games owned by the user 
+.Po the id list can be obtained using steamctl;
+see FILES section for more details on the file format
+.It Fl u Ar url
+Load the game database from the provided
+.Ar url 
+.Pq see FILES section for more details on the database format .
+Cannot be used together with
+.Fl f
+or
+.Fl o
+argument
+.It Fl o
+Load the game database from the game database provided by the official
+PlayOnBSD GitHub repository.
+Cannot be used together with
+.Fl f
+or
+.Fl u
+argument
+.El
+.Pp
+At least one the the
+.Fl f
+,
+.Fl u
+or
+.Fl o
+argument must be provided.
+.Sh COMMANDS
+.Nm
+is a mode-based interface supporting two modes: a list mode and a search
+mode.
+The commands differ according to the mode.
+In the following descriptions, ^X means control-X.
+.Ss list mode
+In this mode, it is possible to navigate in the game list.
+When a game is selected, the corresponding details are displayed in the
+right panel.
+.Bl -tag -width Ds
+.It Sy G
+go to the last game of the list
+.It Sy g
+go to the first game of the list
+.It Sy j | down arrow
+scroll down in the list
+.It Sy k | up arrow
+scroll up in the list
+.It Sy o
+toggle between a first mode where all games are displayed and a second mode
+where only owned games are displayed 
+.Pq show nothing if no Steam ids are provided
+.It Sy q | ^C | ^c 
+exit application
+.It Sy ESC 
+clear the search
+.It Sy TAB | /
+switch to search mode
+.El
+.Ss search mode
+In this mode, the list of games is updated according to the search.
+The search is performed on the name, engine, runtime, tag and genre fields.
+.Bl -tag -width Ds
+.It Sy TAB | ESC | RETURN
+exit from search mode back to list mode
+.El
+.Sh FILES
+.Nm
+uses a game database and, optionally, a file containing a list of Steam ids.
+.Ss game database
+The format of the game database is described in the official PlayOnBSD
+GitHub repository.
+Please refer to it for up-to-date formatting.
+.Ss list of Steam ids
+The file providing the Steam ids should contain space separated values,
+and the first column should contain the Steam ids.
+The correct formatting can be obtain with steamctl and used with
+.Nm
+using the following
+command:
+.Bd -literal -offset indent
+$ steamctl apps list > steam_ids.txt
+$ pobsd-browser -o -s steam_ids.txt
+.Ed
+.Sh AUTHORS
+.Nm
+was written by 
+.An Hukadan ,
+.Mt me@hukadan.org .
