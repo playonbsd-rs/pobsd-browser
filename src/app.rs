@@ -119,11 +119,17 @@ impl App {
     pub fn select_next(&mut self) {
         self.state.select_next()
     }
+
     pub fn select_previous(&mut self) {
         self.state.select_previous()
     }
+
     pub fn select_first(&mut self) {
         self.state.select_first()
+    }
+
+    pub fn select_last(&mut self) {
+        self.state.select_last()
     }
 
     pub fn push_search(&mut self, l: char) {
