@@ -18,4 +18,5 @@ Terminal user interface to browse the PlayOnBSD database.
 
 
 #### Documentation
-There is [website](https://playonbsd-rs.github.io/pobsd-browser.1.html) now. No more need for a man page.
+There is [website](https://playonbsd-rs.github.io/pobsd-browser.1.html) now. No more need for
+a man page (who read them anyways?)
