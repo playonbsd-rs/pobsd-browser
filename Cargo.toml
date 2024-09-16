@@ -8,7 +8,6 @@ edition = "2021"
 homepage = "https://playonbsd-rs.github.io/pobsd-browser.1.html"
 repository = "https://github.com/playonbsd-rs/pobsd-browser"
 documentation = "https://playonbsd-rs.github.io/pobsd-browser.1.html"
-license = "MIT"
 readme = "README.md"
 keywords = ["OpenBSD", "PlayOnBSD"]
 
