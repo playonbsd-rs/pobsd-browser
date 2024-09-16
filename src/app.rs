@@ -1,4 +1,4 @@
-use libpobsd::{GameDataBase, GameFilter, SearchType};
+use libpobsd::{Game, GameDataBase, GameFilter, SearchType};
 use ratatui::{
     style::{Color, Style},
     text::Line,
@@ -29,6 +29,18 @@ impl GameItem {
             uid,
             name,
             steam_owned,
+        }
+    }
+}
+
+impl GameItem {
+    fn from_game(game: &Game, steam_ids: &Option<Vec<usize>>) -> Self {
+        match steam_ids {
+            Some(ids) => match game.get_steam_id() {
+                Some(id) => GameItem::new(game.uid, game.name.to_owned(), ids.contains(&id)),
+                None => GameItem::new(game.uid, game.name.to_owned(), false),
+            },
+            None => GameItem::new(game.uid, game.name.to_owned(), false),
         }
     }
 }
@@ -92,13 +104,7 @@ impl App {
             games: game_db
                 .get_all_games()
                 .into_iter()
-                .map(|g| match &steam_ids {
-                    Some(ids) => match g.get_steam_id() {
-                        Some(id) => GameItem::new(g.uid, g.name.to_owned(), ids.contains(&id)),
-                        None => GameItem::new(g.uid, g.name.to_owned(), false),
-                    },
-                    None => GameItem::new(g.uid, g.name.to_owned(), false),
-                })
+                .map(|g| GameItem::from_game(g, &steam_ids))
                 .collect(),
             game_db,
             state: ListState::default(),
