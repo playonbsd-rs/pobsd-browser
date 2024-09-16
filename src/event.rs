@@ -1,6 +1,6 @@
 use std::time::Duration;
 
-use crossterm::event::{Event as CrosstermEvent, KeyEvent, MouseEvent};
+use crossterm::event::{Event as CrosstermEvent, KeyEvent};
 use futures::{FutureExt, StreamExt};
 use tokio::sync::mpsc;
 
@@ -13,10 +13,6 @@ pub enum Event {
     Tick,
     /// Key press.
     Key(KeyEvent),
-    /// Mouse click/scroll.
-    Mouse(MouseEvent),
-    /// Terminal resize.
-    Resize(u16, u16),
 }
 
 /// Terminal event handler.
@@ -57,11 +53,9 @@ impl EventHandler {
                           _sender.send(Event::Key(key)).unwrap();
                         }
                       },
-                      CrosstermEvent::Mouse(mouse) => {
-                        _sender.send(Event::Mouse(mouse)).unwrap();
+                      CrosstermEvent::Mouse(_) => {
                       },
-                      CrosstermEvent::Resize(x, y) => {
-                        _sender.send(Event::Resize(x, y)).unwrap();
+                      CrosstermEvent::Resize(_, _) => {
                       },
                       CrosstermEvent::FocusLost => {
                       },
