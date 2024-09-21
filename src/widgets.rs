@@ -9,7 +9,7 @@ fn add_field(text: &mut Vec<Line>, field_name: &str, field: &Option<String>) {
     if let Some(field) = field {
         let line = Line::from(vec![
             Span::styled(format!("{}: ", field_name), Style::new().blue().bold()),
-            Span::raw(field.to_owned()),
+            Span::raw(field.to_string()),
         ]);
         text.push(line);
     }
